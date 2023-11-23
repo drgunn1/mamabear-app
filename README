@@ -1,0 +1,87 @@
+## Application
+
+This application acquires sensors values and display them in a simple interface. The sensors value acquisition is done through the listening of the corresponding sensors topics from a MQTT broker.
+
+### Requirements
+
+* Qt 6.2.X or newer.
+* QtMqtt package, which build and installation is described [bellow](#qt-dependency-build)
+
+Note: The application was developed and tested with **Qt 6.5.2** but it should work with Qt version **6.2.X and newer**.
+
+### Build
+
+1. Set environment
+    ```
+    export QT_VERSION="<qt-version>"
+
+    export QT_INSTALL_DIR="<path-to-qt>/Qt/"
+    export CMAKE_BIN_DIR="${QT_INSTALL_DIR}/Tools/CMake/bin"
+    export QMAKE_BIN_DIR="${QT_INSTALL_DIR}/${QT_VERSION}/gcc_64/bin"
+    export CMAKE_PREFIX_PATH="${QT_INSTALL_DIR}/${QT_VERSION}/gcc_64"
+    export NINJA_DIR="${QT_INSTALL_DIR}/Tools/Ninja"
+    export PATH="${PATH}:${CMAKE_BIN_DIR}:${QMAKE_BIN_DIR}:${NINJA_DIR}"
+   ```
+
+2. build
+    ```
+    mkdir <mamabear-app>/build
+    cd <mamabear-app>/build
+    ${QMAKE_BIN_DIR}/qt-configure-module ..
+    ${CMAKE_BIN_DIR}/cmake --build .
+    ```
+
+## MQTT
+
+### Qt dependency build
+
+Mqtt module despite being available is not distributed/installed by default along with Qt.
+To be able to build mamabearApp one must first build and install QMqtt following the instructions bellow.
+
+1. Set environment
+    ```
+    export QT_VERSION="<qt-version>"
+
+    export QT_INSTALL_DIR="<path-to-qt>/Qt/"
+    export CMAKE_BIN_DIR="${QT_INSTALL_DIR}/Tools/CMake/bin"
+    export QMAKE_BIN_DIR="${QT_INSTALL_DIR}/${QT_VERSION}/gcc_64/bin"
+    export CMAKE_PREFIX_PATH="${QT_INSTALL_DIR}/${QT_VERSION}/gcc_64"
+    export NINJA_DIR="${QT_INSTALL_DIR}/Tools/Ninja"
+    export PATH="${PATH}:${CMAKE_BIN_DIR}:${QMAKE_BIN_DIR}:${NINJA_DIR}"
+   ```
+
+2. Download source
+
+    Choose the branch that corresponds to the qt version with which you want to build this application.
+
+    ```
+    cd <mqtt-dir>
+    git clone -b <qt-version> git://code.qt.io/qt/qtmqtt.git
+    ```
+
+3. Build and Install
+    ```
+    mkdir <mqtt-dir>/qtmqtt/build
+    cd <mqtt-dir>/qtmqtt/build
+    ${QMAKE_BIN_DIR}/qt-configure-module ..
+    ${CMAKE_BIN_DIR}/cmake --build .
+    ${CMAKE_BIN_DIR}/cmake --install . --verbose
+    ```
+
+### In app
+
+The application has a single subscription to all topics through the `#` id but filters out what it
+receives from the sensors it is interest in. The list of topics considered are listed:
+
++ sensors/sht40-temperature
++ sensors/sht40-humidity
++ sensors/sgp40-voc
++ sensors/bmi323-accelerometerX
++ sensors/bmi323-accelerometerY
++ sensors/bmi323-accelerometerZ
++ sensors/bmi323-gyroscopeX
++ sensors/bmi323-gyroscopeY
++ sensors/bmi323-gyroscopeZ
++ sensors/mlx90632-temperature
++ sensors/microphone
++ sensors/sr040-distance
