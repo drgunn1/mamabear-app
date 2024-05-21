@@ -3,10 +3,10 @@ import QtQuick.Controls
 
 Window {
     id: root
-    width: 1920
-    height: 1080
-    minimumHeight: 720
-    minimumWidth: 1280
+    width: 800
+    height: 480
+    minimumHeight: 480
+    minimumWidth: 800
     visible: true
     title: qsTr("mamabear")
     flags: Qt.FramelessWindowHint | Qt.Window
