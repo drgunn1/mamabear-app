@@ -1,5 +1,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QProcess>
+#include "pythonrunner.h"
 
 
 int main(int argc, char *argv[])
@@ -16,6 +18,11 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
+
+    qmlRegisterType<PythonRunner>("Python.Helper", 1, 0, "PythonRunner");
+ //   QProcess *pythonProcess = new QProcess;
+ //   pythonProcess->start("python3", QStringList() << "/root/object_detect_don.py");
+
     engine.load(url);
 
     return app.exec();

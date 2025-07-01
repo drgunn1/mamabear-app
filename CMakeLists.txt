@@ -22,7 +22,7 @@ qt_add_qml_module(appMamabear
     QML_FILES MainView.qml
     QML_FILES SensorData.qml
     QML_FILES Triangle.qml
-    SOURCES MqttSubscriber.h MqttSubscriber.cpp
+    SOURCES MqttSubscriber.h MqttSubscriber.cpp pythonrunner.h
     RESOURCES resources/nxp-logo.svg
     RESOURCES resources/future-electronics.svg
     RESOURCES resources/thermometer.png

@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtMultimedia
 import mamabear
+import Python.Helper
 
 ColumnLayout {
     id: root
@@ -67,7 +68,7 @@ ColumnLayout {
                         text: "Body Temp: %1 °C".arg(mqttSub.feeder.BODY_TEMP)
                         color: "#00A05D"
                         font {
-                            pixelSize: 16
+                            pixelSize: 20
                             bold: true
                         }
                     }
@@ -94,7 +95,7 @@ ColumnLayout {
                               "Humidity - %1 %".arg(mqttSub.feeder.HUM)
                         color: "#00A05D"
                         font {
-                            pixelSize: 16
+                            pixelSize: 20
                             bold: true
                         }
                     }
@@ -121,7 +122,7 @@ ColumnLayout {
                               "gyroscope - x: %1 y: %2 z: %3".arg(mqttSub.feeder.GYROX).arg(mqttSub.feeder.GYROY).arg(mqttSub.feeder.GYROZ)
                         color: "#00A05D"
                         font {
-                            pixelSize: 16
+                            pixelSize: 20
                             bold: true
                         }
                     }
@@ -147,7 +148,7 @@ ColumnLayout {
                         text: qsTr("VOC Index")
                         color: "#00A05D"
                         font {
-                            pixelSize: 16
+                            pixelSize: 20
                             bold: true
                         }
                     }
@@ -211,7 +212,7 @@ ColumnLayout {
                         text: "%1 dB".arg(mqttSub.feeder.MIC)
                         color: "#00A05D"
                         font {
-                            pixelSize: 16
+                            pixelSize: 20
                             bold: true
                         }
                     }
@@ -237,7 +238,7 @@ ColumnLayout {
                         text: "Distance: %1 cm".arg(mqttSub.feeder.DIST)
                         color: "#00A05D"
                         font {
-                            pixelSize: 16
+                            pixelSize: 20
                             bold: true
                         }
                     }
@@ -260,26 +261,77 @@ ColumnLayout {
                 Layout.preferredWidth: 16 / 9 * height
                 Layout.alignment: Qt.AlignCenter
                 color: "transparent"
-                MediaDevices {
-                    id: devices
-                    Component.onCompleted: {
-                        console.log(videoInputs)
-                        console.log(defaultVideoInput)
-                    }
+                PythonRunner {
+                    id: py
                 }
-                CaptureSession {
-                    camera: Camera {
-                        id: camera
-                        cameraDevice: devices.defaultVideoInput
+                Component.onCompleted: {
+                        py.runScript("/opt/mamabear/bin/object_detect.py")
                     }
-                    videoOutput: video
+                Button {
+                    id: detection
+                    text: "Object Detection Demo"
+                    font {
+                        pixelSize: 20
+                        bold: true
+                    }
+
+                    contentItem: Text {
+                        text: detection.text
+                        font: detection.font
+                        opacity: enabled ? 1.0 : 0.3
+                        color: "#00A05D"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+
+                    background: Rectangle {
+                        implicitWidth: 350
+                        implicitHeight: 40
+                        opacity: enabled ? 1 : 0.3
+                        border.color: detection.down ? "#17a81a" : "#21be2b"
+                        border.width: 1
+                        radius: 2
+                    }
+                    
+                    anchors.top: parent.top
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.topMargin: 60
+                    onClicked: py.runScript("/opt/mamabear/bin/object_detect.py")
                 }
-                VideoOutput {
+                Button {
                     id: video
-                    anchors.fill: parent
-                    fillMode: VideoOutput.PreserveAspectFit
+                    text: "Cyclops2 HD camera Demo"
+                    font {
+                        pixelSize: 20
+                        bold: true
+                    }
+
+                    contentItem: Text {
+                        text: video.text
+                        font: video.font
+                        opacity: enabled ? 1.0 : 0.3
+                        color: "#00A05D"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+
+                    background: Rectangle {
+                        implicitWidth: 350
+                        implicitHeight: 40
+                        opacity: enabled ? 1 : 0.3
+                        border.color: video.down ? "#17a81a" : "#21be2b"
+                        border.width: 1
+                        radius: 2
+                    }
+
+                    anchors.bottom: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottomMargin: 60
+                    onClicked: py.runScript("/opt/mamabear/bin/camera.py")
                 }
             }
-        }
+        }   
     }
 }
