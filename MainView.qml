@@ -5,6 +5,7 @@ import QtMultimedia
 import mamabear
 import Python.Helper
 
+
 ColumnLayout {
     id: root
 
@@ -264,9 +265,6 @@ ColumnLayout {
                 PythonRunner {
                     id: py
                 }
-                Component.onCompleted: {
-                        py.runScript("/opt/mamabear/bin/object_detect.py")
-                    }
                 Button {
                     id: detection
                     text: "Object Detection Demo"

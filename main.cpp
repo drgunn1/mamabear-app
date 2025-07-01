@@ -20,8 +20,6 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
     qmlRegisterType<PythonRunner>("Python.Helper", 1, 0, "PythonRunner");
- //   QProcess *pythonProcess = new QProcess;
- //   pythonProcess->start("python3", QStringList() << "/root/object_detect_don.py");
 
     engine.load(url);
 
